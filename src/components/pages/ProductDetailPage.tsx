@@ -1,17 +1,26 @@
-import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Star, Heart, Share2, Truck, Shield, RefreshCw, Plus, Minus, ChevronLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { products } from '@/data/products';
-import { useCartStore } from '@/store/cartStore';
-import { toast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import {
+  Star,
+  Heart,
+  Share2,
+  Truck,
+  Shield,
+  RefreshCw,
+  Plus,
+  Minus,
+  ChevronLeft,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { products } from "@/data/products";
+import { useCartStore } from "@/store/cartStore";
+import { toast } from "@/hooks/use-toast";
 
 export function ProductDetailPage() {
   const { id } = useParams();
-  const product = products.find(p => p.id === id);
+  const product = products.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCartStore();
@@ -35,17 +44,26 @@ export function ProductDetailPage() {
     });
   };
 
-  const discountPercentage = product.originalPrice 
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+  const discountPercentage = product.originalPrice
+    ? Math.round(
+        ((product.originalPrice - product.price) / product.originalPrice) * 100
+      )
     : 0;
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-8">
-        <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+        <Link to="/" className="hover:text-foreground transition-colors">
+          Home
+        </Link>
         <span>/</span>
-        <Link to="/products" className="hover:text-foreground transition-colors">Products</Link>
+        <Link
+          to="/products"
+          className="hover:text-foreground transition-colors"
+        >
+          Products
+        </Link>
         <span>/</span>
         <span>{product.name}</span>
       </div>
@@ -69,7 +87,7 @@ export function ProductDetailPage() {
               className="w-full h-full object-cover"
             />
           </div>
-          
+
           {/* Thumbnail Images */}
           <div className="grid grid-cols-4 gap-4">
             {product.images.map((image, index) => (
@@ -77,7 +95,9 @@ export function ProductDetailPage() {
                 key={index}
                 onClick={() => setSelectedImage(index)}
                 className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
-                  selectedImage === index ? 'border-primary' : 'border-transparent'
+                  selectedImage === index
+                    ? "border-primary"
+                    : "border-transparent"
                 }`}
               >
                 <img
@@ -95,15 +115,21 @@ export function ProductDetailPage() {
           {/* Category & Stock */}
           <div className="flex items-center justify-between">
             <Badge>{product.category}</Badge>
-            <span className={`text-sm ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
-              {product.inStock ? 'In Stock' : 'Out of Stock'}
+            <span
+              className={`text-sm ${
+                product.inStock ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {product.inStock ? "In Stock" : "Out of Stock"}
             </span>
           </div>
 
           {/* Title */}
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-2">{product.name}</h1>
-            
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+              {product.name}
+            </h1>
+
             {/* Rating */}
             <div className="flex items-center space-x-2">
               <div className="flex">
@@ -112,8 +138,8 @@ export function ProductDetailPage() {
                     key={i}
                     className={`h-4 w-4 ${
                       i < Math.floor(product.rating)
-                        ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-gray-300'
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
                     }`}
                   />
                 ))}
@@ -134,9 +160,7 @@ export function ProductDetailPage() {
                 </span>
               )}
               {discountPercentage > 0 && (
-                <Badge className="bg-red-500">
-                  -{discountPercentage}% OFF
-                </Badge>
+                <Badge className="bg-red-500">-{discountPercentage}% OFF</Badge>
               )}
             </div>
             <p className="text-sm text-muted-foreground">
@@ -145,7 +169,9 @@ export function ProductDetailPage() {
           </div>
 
           {/* Description */}
-          <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+          <p className="text-muted-foreground leading-relaxed">
+            {product.description}
+          </p>
 
           {/* Features */}
           <div>
@@ -185,9 +211,9 @@ export function ProductDetailPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button 
-                size="lg" 
-                className="flex-1" 
+              <Button
+                size="lg"
+                className="flex-1"
                 onClick={handleAddToCart}
                 disabled={!product.inStock}
               >
@@ -227,9 +253,11 @@ export function ProductDetailPage() {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="description">Description</TabsTrigger>
             <TabsTrigger value="specifications">Specifications</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews ({product.reviews})</TabsTrigger>
+            <TabsTrigger value="reviews">
+              Reviews ({product.reviews})
+            </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="description" className="mt-8">
             <div className="prose max-w-none">
               <p className="text-muted-foreground leading-relaxed">
@@ -248,41 +276,55 @@ export function ProductDetailPage() {
               </div>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="specifications" className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
                 <div className="flex justify-between py-2 border-b">
                   <span className="font-medium">Category</span>
-                  <span className="text-muted-foreground">{product.category}</span>
+                  <span className="text-muted-foreground">
+                    {product.category}
+                  </span>
                 </div>
                 <div className="flex justify-between py-2 border-b">
                   <span className="font-medium">Rating</span>
-                  <span className="text-muted-foreground">{product.rating}/5</span>
+                  <span className="text-muted-foreground">
+                    {product.rating}/5
+                  </span>
                 </div>
                 <div className="flex justify-between py-2 border-b">
                   <span className="font-medium">Reviews</span>
-                  <span className="text-muted-foreground">{product.reviews}</span>
+                  <span className="text-muted-foreground">
+                    {product.reviews}
+                  </span>
                 </div>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between py-2 border-b">
                   <span className="font-medium">Availability</span>
-                  <span className={product.inStock ? 'text-green-600' : 'text-red-600'}>
-                    {product.inStock ? 'In Stock' : 'Out of Stock'}
+                  <span
+                    className={
+                      product.inStock ? "text-green-600" : "text-red-600"
+                    }
+                  >
+                    {product.inStock ? "In Stock" : "Out of Stock"}
                   </span>
                 </div>
                 <div className="flex justify-between py-2 border-b">
                   <span className="font-medium">SKU</span>
-                  <span className="text-muted-foreground">SKU-{product.id}</span>
+                  <span className="text-muted-foreground">
+                    SKU-{product.id}
+                  </span>
                 </div>
               </div>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="reviews" className="mt-8">
             <div className="text-center py-8">
-              <p className="text-muted-foreground">Reviews feature coming soon!</p>
+              <p className="text-muted-foreground">
+                Reviews feature coming soon!
+              </p>
             </div>
           </TabsContent>
         </Tabs>

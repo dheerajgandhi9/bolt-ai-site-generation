@@ -1,71 +1,88 @@
-import { useState, useMemo } from 'react';
-import { Search, Filter, Grid, List, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { ProductCard } from '@/components/ui/ProductCard';
-import { products, categories } from '@/data/products';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useMemo } from "react";
+import { Search, Grid, List } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { ProductCard } from "@/components/ui/ProductCard";
+import { products, categories } from "@/data/products";
+import { useSearchParams } from "react-router-dom";
 
 export function ProductsPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'All');
-  const [sortBy, setSortBy] = useState('featured');
-  const [priceRange, setPriceRange] = useState('all');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || "All"
+  );
+  const [sortBy, setSortBy] = useState("featured");
+  const [priceRange, setPriceRange] = useState("all");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products;
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          product.tags.some((tag) =>
+            tag.toLowerCase().includes(searchTerm.toLowerCase())
+          )
       );
     }
 
     // Filter by category
-    if (selectedCategory !== 'All') {
-      filtered = filtered.filter(product => 
-        product.category.toLowerCase() === selectedCategory.toLowerCase()
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter(
+        (product) =>
+          product.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
 
     // Filter by price range
-    if (priceRange !== 'all') {
+    if (priceRange !== "all") {
       switch (priceRange) {
-        case 'under-50':
-          filtered = filtered.filter(product => product.price < 50);
+        case "under-50":
+          filtered = filtered.filter((product) => product.price < 50);
           break;
-        case '50-200':
-          filtered = filtered.filter(product => product.price >= 50 && product.price <= 200);
+        case "50-200":
+          filtered = filtered.filter(
+            (product) => product.price >= 50 && product.price <= 200
+          );
           break;
-        case '200-500':
-          filtered = filtered.filter(product => product.price >= 200 && product.price <= 500);
+        case "200-500":
+          filtered = filtered.filter(
+            (product) => product.price >= 200 && product.price <= 500
+          );
           break;
-        case 'over-500':
-          filtered = filtered.filter(product => product.price > 500);
+        case "over-500":
+          filtered = filtered.filter((product) => product.price > 500);
           break;
       }
     }
 
     // Sort products
     switch (sortBy) {
-      case 'price-low':
+      case "price-low":
         filtered.sort((a, b) => a.price - b.price);
         break;
-      case 'price-high':
+      case "price-high":
         filtered.sort((a, b) => b.price - a.price);
         break;
-      case 'rating':
+      case "rating":
         filtered.sort((a, b) => b.rating - a.rating);
         break;
-      case 'newest':
+      case "newest":
         // Simulate newest by reversing array
         filtered.reverse();
         break;
@@ -151,11 +168,11 @@ export function ProductsPage() {
           <span className="text-sm text-muted-foreground">
             {filteredAndSortedProducts.length} products found
           </span>
-          {selectedCategory !== 'All' && (
+          {selectedCategory !== "All" && (
             <Badge variant="secondary" className="flex items-center space-x-1">
               <span>{selectedCategory}</span>
               <button
-                onClick={() => setSelectedCategory('All')}
+                onClick={() => setSelectedCategory("All")}
                 className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
               >
                 ×
@@ -167,16 +184,16 @@ export function ProductsPage() {
         {/* View Toggle */}
         <div className="flex items-center space-x-2">
           <Button
-            variant={viewMode === 'grid' ? 'default' : 'ghost'}
+            variant={viewMode === "grid" ? "default" : "ghost"}
             size="icon"
-            onClick={() => setViewMode('grid')}
+            onClick={() => setViewMode("grid")}
           >
             <Grid className="h-4 w-4" />
           </Button>
           <Button
-            variant={viewMode === 'list' ? 'default' : 'ghost'}
+            variant={viewMode === "list" ? "default" : "ghost"}
             size="icon"
-            onClick={() => setViewMode('list')}
+            onClick={() => setViewMode("list")}
           >
             <List className="h-4 w-4" />
           </Button>
@@ -184,11 +201,13 @@ export function ProductsPage() {
       </div>
 
       {/* Products Grid */}
-      <div className={`grid gap-6 ${
-        viewMode === 'grid' 
-          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
-          : 'grid-cols-1'
-      }`}>
+      <div
+        className={`grid gap-6 ${
+          viewMode === "grid"
+            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            : "grid-cols-1"
+        }`}
+      >
         {filteredAndSortedProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -207,9 +226,9 @@ export function ProductsPage() {
           <Button
             variant="outline"
             onClick={() => {
-              setSearchTerm('');
-              setSelectedCategory('All');
-              setPriceRange('all');
+              setSearchTerm("");
+              setSelectedCategory("All");
+              setPriceRange("all");
             }}
           >
             Clear Filters

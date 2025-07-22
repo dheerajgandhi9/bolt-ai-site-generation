@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { User } from '@/types';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { User } from "@/types";
 
 interface AuthStore {
   user: User | null;
@@ -16,45 +16,47 @@ export const useAuthStore = create<AuthStore>()(
     (set, get) => ({
       user: null,
       isLoading: false,
-      
-      login: async (email, password) => {
+
+      login: async (email) => {
         set({ isLoading: true });
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // Mock successful login
         const user: User = {
-          id: '1',
+          id: "1",
           email,
-          name: email.split('@')[0],
-          avatar: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg'
+          name: email.split("@")[0],
+          avatar:
+            "https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg",
         };
-        
+
         set({ user, isLoading: false });
       },
-      
-      register: async (email, password, name) => {
+
+      register: async (email, name) => {
         set({ isLoading: true });
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // Mock successful registration
         const user: User = {
-          id: '1',
+          id: "1",
           email,
           name,
-          avatar: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg'
+          avatar:
+            "https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg",
         };
-        
+
         set({ user, isLoading: false });
       },
-      
+
       logout: () => set({ user: null }),
-      
-      isAuthenticated: () => !!get().user
+
+      isAuthenticated: () => !!get().user,
     }),
     {
-      name: 'auth-storage'
+      name: "auth-storage",
     }
   )
 );
